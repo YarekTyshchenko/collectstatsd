@@ -3,6 +3,7 @@ $socket = fsockopen(sprintf("udp://%s", '127.0.0.1'), 8125);
 $postdata = json_decode(file_get_contents("php://input"), true);
 foreach($postdata as $m) {
 	foreach ($m['dsnames'] as $key => $name) {
+		$statName = '';
 		if (count($m['dsnames']) > 1) {
 			$statName = '.'.$name;
 		}
