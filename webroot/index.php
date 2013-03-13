@@ -17,8 +17,6 @@ foreach($postdata as $m) {
 		);
 		send($metric);
 	}
-	file_put_contents('metrics.txt', $metric.PHP_EOL, FILE_APPEND);
-	//file_put_contents('log.txt', print_r($m, true).PHP_EOL, FILE_APPEND);
 }
 
 function stat_name($stat, $instance) {
@@ -47,26 +45,6 @@ function error($message) {
 			date('Y-m-d H:i:s'), $message
 		)
 	);
-}
-
-function print_stat($file, $content) {
-	$file = preg_replace('/[^a-zA-Z0-9\/\-]/', '+', $file);
-	preg_match('@/var/lib/collectd/csv/(.*)/(.*)/(.*)-\d{4}-\d\d-\d\d@', $file, $matches);
-	array_shift($matches);
-	$host = array_shift($matches);
-	$plugin = array_shift($matches);
-
-	$content = explode(',', $content);
-	array_shift($content);
-	foreach ($content as $key => $value) {
-		$out = sprintf(
-			'collectd.%s.%s.%s.%s:%s|%s',
-			$host, $plugin, implode('-', $matches), $key, $value, 'g'
-		);
-		send($out);
-		fwrite(STDERR, $out.PHP_EOL);
-		//usleep(20000);
-	}
 }
 
 function send($message) {
